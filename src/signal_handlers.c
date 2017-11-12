@@ -1,11 +1,19 @@
 #include "signal_handlers.h"
+#include<signal.h>
 
-void catch_sigint(int signalNo)
+void catch_sigint(int sig)
 {
-  // TODO: File this!
+
+signal(sig,SIG_IGN);
+
+signal(SIGINT,catch_sigint);
+
 }
-
-void catch_sigtstp(int signalNo)
+void catch_sigtstp(int sig)
 {
-  // TODO: File this!
+ signal(sig,SIG_IGN);
+
+signal(SIGTSTP,catch_sigtstp);
+
+
 }
