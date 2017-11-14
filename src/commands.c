@@ -14,6 +14,7 @@ static struct built_in_command built_in_commands[] = {
   { "fg", do_fg, validate_fg_argv }
 };
 
+
 static int is_built_in_command(const char* command_name)
 {
   static const int n_built_in_commands = sizeof(built_in_commands) / sizeof(built_in_commands[0]);
@@ -42,7 +43,7 @@ int evaluate_command(int n_commands, struct single_command (*commands)[512])
     int built_in_pos = is_built_in_command(com->argv[0]);
 
     if (built_in_pos != -1) {
-      
+    
 if (built_in_commands[built_in_pos].command_validate(com->argc, com->argv)) {
      if(strcmp(com->argv[0],"cd")==0 && strcmp(com->argv[1],"~")==0){chdir("/home/aeis");}   
 
@@ -59,7 +60,6 @@ else {
         return -1;
       }
    
-
  } 
 
 
@@ -68,13 +68,14 @@ else {
  else if (strcmp(com->argv[0], "") == 0) {
       return 0;  
     }
-
+ 
 else if (strcmp(com->argv[0], "exit") == 0) {
       return 1;  
     }
 
  else {int j=0;
 	while(com->argv[j]!=NULL){j++;}
+	
 	
 	char * ch_s[]={"/usr/local/bin/","/usr/bin/","/bin/","/usr/sbin/","/sbin/"};
 	char str_1[100]={0,};char str_2[100]={0,};char str_3[100]={0,};char str_4[100]={0,};
@@ -111,7 +112,7 @@ else if (strcmp(com->argv[0], "exit") == 0) {
 
 				{   ch[0]=str[i];
 				for(int k=1;k<j;k++){ch[k]=com->argv[k];}ch[j]=NULL;
-			
+				
 				ret=execv(str[i],ch);
 			
 				if(ret!=-1){n=1;
@@ -120,11 +121,11 @@ else if (strcmp(com->argv[0], "exit") == 0) {
 					
 				if(i==5 || n==1){
 					if(i==5){
-	 				printf("%s: Command not foundddd",ch);
+	 				printf("%s: Command not found\n",com->argv[0]);
 					
 						break;	
 					}
-			
+					
 }
 				}
 			}
@@ -133,9 +134,11 @@ else if (strcmp(com->argv[0], "exit") == 0) {
 			}if(i==5){exit(0);}
 
 
-	if(com_2[0]=='/' && strcmp(com->argv[j-1],"&")!=0)
+	if(com_2[0]=='/')
 		{
 				
+		
+		
 		char *ch[10]={0,};
 		for(int k=0;k<j;k++){ch[k]=com->argv[k];}
 			ch[j]=NULL;
@@ -148,7 +151,7 @@ else if (strcmp(com->argv[0], "exit") == 0) {
 		
 			ret=execv(ch[0],ch);
 			if(ret==-1){
-			printf("bash: No such file or directory"); 
+			printf("bash: %s: No such file or directory\n",com->argv[0]); 
 			exit(0);				
 			}
 		}
@@ -159,6 +162,7 @@ else if (strcmp(com->argv[0], "exit") == 0) {
 
   return 0;}
 }
+
 void free_commands(int n_commands, struct single_command (*commands)[512])
 {
   for (int i = 0; i < n_commands; ++i) {
